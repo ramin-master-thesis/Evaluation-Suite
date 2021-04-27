@@ -1,0 +1,32 @@
+dataset:
+  should_sample: False
+  path: data/left_index.gzip
+  sample_size: 500
+
+applications:
+  - star-space:
+    id: StarSpace
+    hash_function: StarSpace
+    host: localhost
+    merge: True
+    partition_port:
+      0:
+        5002
+      1:
+        5003
+      2:
+        5004
+      3:
+        5005
+
+salsa:
+  walks:
+  - 100
+  - 1000
+  - 10000
+  walk_length:
+  - 100
+  - 1000
+  - 10000
+  limit:
+  - 10

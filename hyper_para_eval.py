@@ -1,29 +1,20 @@
 import os
-import sys
 
 import papermill as pm
-import yaml
+
+if not os.path.exists("output/notebooks"):
+    os.mkdir("output/notebooks")
+
+### configs ###
+user_sample_path = "data/users.json"
+app_id = "StarSpace"
+hash_function = "StarSpace"
+should_merge = True
+partition_port = {"0": "5002", "1": "5003", "2": "5004", "3": "5005"}
 
 
-def sample_users():
-    print(f"sampling {samples} users")
-    pm.execute_notebook(
-        "src/sample_users.ipynb",
-        "output/notebooks/sample_users.ipynb",
-        parameters={
-            "data": params["dataset"]["path"],
-            "output": user_sample_path,
-            "sample": samples,
-        }
-    )
-
-
-def fetch_recommendations(application):
+def fetch_star_space_recommendations():
     ### Fetch recommendations from API ###
-    app_id = application["id"]
-    hash_function = application["hash_function"]
-    should_merge = bool(application["merge"])
-    partition_port = application["partition_port"]
     print(f"fetch recommendations for {hash_function}, with partition port {partition_port}")
     pm.execute_notebook(
         "src/query_recommendations.ipynb",
@@ -39,11 +30,8 @@ def fetch_recommendations(application):
     )
 
 
-def calculate_map_k(application):
+def calculate_map_k():
     ### Fetch recommendations from API ###
-    app_id = application["id"]
-    hash_function = application["hash_function"]
-    should_merge = bool(application["merge"])
     print(f"calculating MAP@K for {hash_function}")
     pm.execute_notebook(
         "src/APK_MAPK.ipynb",
@@ -64,35 +52,9 @@ def calculate_map_k(application):
 
 
 def main():
-    if should_sample:
-        sample_users()
-    for application in params["applications"]:
-        fetch_recommendations(application)
-        if application["hash_function"] != "Single":
-            calculate_map_k(application)
+    fetch_star_space_recommendations()
+    calculate_map_k()
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Please provide a yaml config file. Python3 -m main <path-to-config-file.yaml>")
-        exit(1)
-
-    if not os.path.exists("output/notebooks"):
-        os.mkdir("output/notebooks")
-
-    ### Parameters ###
-    path_to_config_file = sys.argv[1]
-    with open(path_to_config_file, "r") as file:
-        params = yaml.load(file)
-
-    ### Paths ###
-    user_sample_path = "data/users.json"
-
-    ### Samples ###
-    samples = int(params["dataset"]["sample_size"])
-    should_sample = bool(params["dataset"]["should_sample"])
-
-    ### Compute variants ###
-    salsa = params["salsa"]
-
     main()

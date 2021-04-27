@@ -1,0 +1,114 @@
+dataset:
+  should_sample: True
+  path: data/left_index.gzip
+  sample_size: 500
+
+applications:
+  - baseline:
+    id: baseline
+    hash_function: Single
+    host: localhost
+    merge: False
+    partition_port:
+      partition:
+        5001
+
+  - single:
+    id: single
+    hash_function: Single
+    host: localhost
+    merge: False
+    partition_port:
+      partition:
+        5001
+
+  - murmur2:
+    id: murmur2
+    hash_function: murmur2
+    host: localhost
+    merge: True
+    partition_port:
+      0:
+        5002
+      1:
+        5003
+      2:
+        5004
+      3:
+        5005
+      4:
+        5006
+      5:
+        5007
+      6:
+        5008
+      7:
+        5009
+      8:
+        5010
+      9:
+        5011
+      10:
+        5012
+      11:
+        5013
+      12:
+        5014
+      13:
+        5015
+      14:
+        5016
+      15:
+        5017
+
+  - star-space:
+    id: StarSpace
+    hash_function: StarSpace
+    host: localhost
+    merge: True
+    partition_port:
+      0:
+        5002
+      1:
+        5003
+      2:
+        5004
+      3:
+        5005
+      4:
+        5006
+      5:
+        5007
+      6:
+        5008
+      7:
+        5009
+      8:
+        5010
+      9:
+        5011
+      10:
+        5012
+      11:
+        5013
+      12:
+        5014
+      13:
+        5015
+      14:
+        5016
+      15:
+        5017
+
+
+salsa:
+  walks:
+  - 100
+  - 1000
+  - 10000
+  walk_length:
+  - 100
+  - 1000
+  - 10000
+  limit:
+  - 10

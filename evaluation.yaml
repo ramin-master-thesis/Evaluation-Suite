@@ -1,4 +1,5 @@
 dataset:
+  should_sample: True
   path: data/left_index.gzip
   sample_size: 500
 
@@ -31,16 +32,9 @@ applications:
         5002
       1:
         5003
-
-  - star_space:
-    id: StarSpace
-    hash_function: StarSpace
-    host: localhost
-    merge: True
-    partition_port:
-      0:
+      2:
         5004
-      1:
+      3:
         5005
 
 salsa:
