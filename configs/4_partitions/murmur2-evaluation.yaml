@@ -8,8 +8,9 @@ applications:
     id: murmur2
     hash_function: murmur2
     host: localhost
-    merge: True
-    show_partitions: False
+    merge: False
+    show_best_partition: False
+    show_partitions: True
     calculate_map_k: True
     partition_port:
       0:
@@ -20,30 +21,6 @@ applications:
         5002
       3:
         5003
-      4:
-        5004
-      5:
-        5005
-      6:
-        5006
-      7:
-        5007
-      8:
-        5008
-      9:
-        5009
-      10:
-        5010
-      11:
-        5011
-      12:
-        5012
-      13:
-        5013
-      14:
-        5014
-      15:
-        5015
 
 salsa:
   walks:

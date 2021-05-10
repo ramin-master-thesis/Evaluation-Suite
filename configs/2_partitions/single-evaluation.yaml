@@ -1,0 +1,39 @@
+dataset:
+  should_sample: True
+  path: data/left_index.gzip
+  sample_size: 500
+
+applications:
+  - baseline:
+    id: baseline
+    hash_function: Single
+    host: localhost
+    merge: False
+    show_best_partition: False
+    calculate_map_k: False
+    partition_port:
+      partition:
+        5000
+
+  - single:
+    id: single
+    hash_function: Single
+    host: localhost
+    merge: False
+    show_best_partition: False
+    calculate_map_k: False
+    partition_port:
+      partition:
+        5000
+
+salsa:
+  walks:
+    - 100
+    - 1000
+    - 10000
+  walk_length:
+    - 100
+    - 1000
+    - 10000
+  limit:
+    - 10

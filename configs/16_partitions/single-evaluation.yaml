@@ -9,6 +9,7 @@ applications:
     hash_function: Single
     host: localhost
     merge: False
+    show_best_partition: False
     calculate_map_k: False
     partition_port:
       partition:
@@ -19,6 +20,7 @@ applications:
     hash_function: Single
     host: localhost
     merge: False
+    show_best_partition: False
     calculate_map_k: False
     partition_port:
       partition:

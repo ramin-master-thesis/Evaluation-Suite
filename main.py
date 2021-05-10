@@ -24,6 +24,7 @@ def fetch_recommendations(application):
     app_id = application["id"]
     hash_function = application["hash_function"]
     should_merge = bool(application["merge"])
+    best_partition = bool(application["show_best_partition"])
     partition_port = application["partition_port"]
     print(f"fetch recommendations for {hash_function}, with partition port {partition_port}")
     pm.execute_notebook(
@@ -34,18 +35,20 @@ def fetch_recommendations(application):
             "hash_function": hash_function,
             "partition_port": partition_port,
             "should_merge": should_merge,
+            "should_take_best_partition": best_partition,
             "output_recommendations": f"data/{app_id}_recommendations.json",
-            "output_merge_recommendations": f"data/{app_id}_merge_recommendations.json"
+            "output_merge_recommendations": f"data/{app_id}_merge_recommendations.json",
+            "output_best_partition_recommendations": f"data/{hash_function}_best_partition_recommendations.json"
         }
     )
 
 
 def calculate_map_k(application):
-    ### Fetch recommendations from API ###
     app_id = application["id"]
     hash_function = application["hash_function"]
-    should_merge = bool(application["merge"])
     show_partitions = bool(application["show_partitions"])
+    show_merge = bool(application["merge"])
+    show_best_partition = bool(application["show_best_partition"])
     print(f"calculating MAP@K for {hash_function}")
     pm.execute_notebook(
         "src/APK_MAPK.ipynb",
@@ -53,15 +56,17 @@ def calculate_map_k(application):
         parameters={
             "users": user_sample_path,
             "hash_function": hash_function,
-            "should_merge": should_merge,
             "show_partitions": show_partitions,
+            "show_merge": show_merge,
+            "show_best_partition": show_best_partition,
             "baseline_recommendations_path": "data/baseline_recommendations.json",
             "single_partition_recommendations_path": "data/single_recommendations.json",
             "recommendations_path": f"data/{hash_function}_recommendations.json",
             "merge_recommendations_path": f"data/{hash_function}_merge_recommendations.json",
+            "best_partition_recommendations_path": f"data/{hash_function}_best_partition_recommendations.json",
             "output_map": f"data/{hash_function}_map@k.json",
             "output_diagram": f"output/{hash_function}_map@k.png",
-            "output_map_at_10": f"output/{hash_function}_map@10.csv"
+            "output_map_at_k": f"output/{hash_function}_map@k.csv"
         }
     )
 
@@ -88,8 +93,8 @@ def main():
     if should_sample:
         sample_users()
     for application in params["applications"]:
-        get_stats(application)
         fetch_recommendations(application)
+        get_stats(application)
         if application["calculate_map_k"]:
             calculate_map_k(application)
 
