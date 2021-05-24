@@ -8,9 +8,10 @@ applications:
     id: StarSpace
     hash_function: StarSpace
     host: localhost
-    merge: False
-    show_best_partition: False
-    show_partitions: True
+    merge_1: True
+    merge_2: True
+    merge_3: True
+    show_partitions: False
     calculate_map_k: True
     partition_port:
       0:

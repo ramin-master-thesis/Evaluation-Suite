@@ -8,8 +8,9 @@ applications:
     id: baseline
     hash_function: Single
     host: localhost
-    merge: False
-    show_best_partition: False
+    merge_1: False
+    merge_2: False
+    merge_3: False
     calculate_map_k: False
     partition_port:
       partition:
@@ -19,8 +20,9 @@ applications:
     id: single
     hash_function: Single
     host: localhost
-    merge: False
-    show_best_partition: False
+    merge_1: False
+    merge_2: False
+    merge_3: False
     calculate_map_k: False
     partition_port:
       partition:
