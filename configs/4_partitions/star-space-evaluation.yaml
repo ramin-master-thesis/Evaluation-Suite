@@ -3,6 +3,9 @@ dataset:
   path: data/left_index.gzip
   sample_size: 500
 
+baseline:
+  should_generate_baseline: False
+
 applications:
   - star-space:
     id: StarSpace
@@ -15,22 +18,18 @@ applications:
     calculate_map_k: True
     partition_port:
       0:
-        5000
+        5004
       1:
-        5001
+        5005
       2:
-        5002
+        5006
       3:
-        5003
+        5007
 
 salsa:
   walks:
-    - 100
     - 1000
-    - 10000
   walk_length:
     - 100
-    - 1000
-    - 10000
   limit:
     - 10

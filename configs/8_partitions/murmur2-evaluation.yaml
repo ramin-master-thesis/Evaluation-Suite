@@ -3,6 +3,9 @@ dataset:
   path: data/left_index.gzip
   sample_size: 500
 
+baseline:
+  should_generate_baseline: False
+
 applications:
   - murmur2:
     id: murmur2
@@ -33,12 +36,8 @@ applications:
 
 salsa:
   walks:
-    - 100
     - 1000
-    - 10000
   walk_length:
     - 100
-    - 1000
-    - 10000
   limit:
     - 10

@@ -7,14 +7,33 @@ from yaml import SafeLoader
 
 
 def sample_users():
-    print(f"sampling {samples} users")
+    min_interactions = params["dataset"]["min_interactions"]
+    print(f"sampling {samples} users with min {min_interactions}")
     pm.execute_notebook(
         "src/sample_users.ipynb",
         "output/notebooks/sample_users.ipynb",
         parameters={
             "data": params["dataset"]["path"],
+            "min_interactions": min_interactions,
             "output": user_sample_path,
             "sample": samples,
+        }
+    )
+
+
+def generate_baseline():
+    ### Fetch baseline from API ###
+    port = 5000
+    repeat_for_user = 10
+    print(f"generating baseline with repeat for single user is {repeat_for_user}")
+    pm.execute_notebook(
+        "src/query_baseline.ipynb",
+        f"output/notebooks/query_baseline.ipynb",
+        parameters={
+            "users": user_sample_path,
+            "port": port,
+            "repeat_for_user": repeat_for_user,
+            "output_baseline_recommendations": f"data/baseline_recommendations.json"
         }
     )
 
@@ -127,6 +146,8 @@ def get_stats(application):
 def main():
     if should_sample:
         sample_users()
+    if should_generate_baseline:
+        generate_baseline()
     for application in params["applications"]:
         fetch_recommendations(application)
         get_stats(application)
@@ -158,5 +179,8 @@ if __name__ == "__main__":
 
     ### Compute variants ###
     salsa = params["salsa"]
+
+    ### Baseline ###
+    should_generate_baseline = bool(params["baseline"]["should_generate_baseline"])
 
     main()

@@ -3,18 +3,10 @@ dataset:
   path: data/left_index.gzip
   sample_size: 500
 
+baseline:
+  should_generate_baseline: True
+
 applications:
-  - baseline:
-    id: baseline
-    hash_function: Single
-    host: localhost
-    merge_1: False
-    merge_2: False
-    merge_3: False
-    calculate_map_k: False
-    partition_port:
-      partition:
-        5000
 
   - single:
     id: single
@@ -30,12 +22,8 @@ applications:
 
 salsa:
   walks:
-    - 100
     - 1000
-    - 10000
   walk_length:
     - 100
-    - 1000
-    - 10000
   limit:
     - 10
