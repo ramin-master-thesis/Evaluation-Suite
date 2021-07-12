@@ -5,6 +5,7 @@ import papermill as pm
 import yaml
 from yaml import SafeLoader
 
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def sample_users():
     min_interactions = params["dataset"]["min_interactions"]
@@ -57,6 +58,7 @@ def fetch_recommendations(application):
             "should_merge_1": should_merge_1,
             "should_merge_2": should_merge_2,
             "should_merge_3": should_merge_3,
+            "output_latency": f"data/{app_id}_latency.json",
             "output_recommendations": f"data/{app_id}_recommendations.json",
             "output_merge_recommendations": f"data/{app_id}_merge_recommendations.json",
             "output_best_partition_recommendations": f"data/{hash_function}_best_partition_recommendations.json",
@@ -161,8 +163,8 @@ if __name__ == "__main__":
         print("Please provide a yaml config file. Python3 -m main <path-to-config-file.yaml>")
         exit(1)
 
-    if not os.path.exists("output/notebooks"):
-        os.mkdir("output/notebooks")
+    if not os.path.exists(f"{ROOT_DIR}/output/notebooks"):
+        os.makedirs(f"{ROOT_DIR}/output/notebooks")
 
     ### Parameters ###
     path_to_config_file = sys.argv[1]
