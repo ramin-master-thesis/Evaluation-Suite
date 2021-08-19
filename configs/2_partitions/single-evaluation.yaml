@@ -9,18 +9,16 @@ baseline:
   repeat: 10
 
 application:
-
-  - single:
-    id: single
-    hash_function: Single
-    host: localhost
-    union_results: False
-    highest_hit: False
-    most_interactions: False
-    metrics: ["MAP", "RBO"]
-    partition_port:
-      partition:
-        5000
+  id: single
+  hash_function: Single
+  host: localhost
+  union_results: False
+  highest_hit: False
+  most_interactions: False
+  metrics: [ "MAP", "RBO" ]
+  partition_port:
+    partition:
+      5000
 
 salsa:
   walks:

@@ -1,11 +1,3 @@
-dataset:
-  should_sample: False
-  path: data/left_index.gzip
-  sample_size: 500
-
-baseline:
-  should_generate_baseline: False
-
 application:
   id: StarSpace
   hash_function: StarSpace

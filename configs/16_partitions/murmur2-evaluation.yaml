@@ -1,54 +1,45 @@
-dataset:
-  should_sample: False
-  path: data/left_index.gzip
-  sample_size: 500
-
-baseline:
-  should_generate_baseline: False
-
 application:
-  - murmur2:
-    id: murmur2
-    hash_function: murmur2
-    host: localhost
-    union_results: True
-    highest_hit: True
-    most_interactions: True
-    show_partitions: False
-    metrics: ["MAP", "RBO"]
-    partition_port:
-      0:
-        5000
-      1:
-        5001
-      2:
-        5002
-      3:
-        5003
-      4:
-        5004
-      5:
-        5005
-      6:
-        5006
-      7:
-        5007
-      8:
-        5008
-      9:
-        5009
-      10:
-        5010
-      11:
-        5011
-      12:
-        5012
-      13:
-        5013
-      14:
-        5014
-      15:
-        5015
+  id: murmur2
+  hash_function: murmur2
+  host: localhost
+  union_results: True
+  highest_hit: True
+  most_interactions: True
+  show_partitions: False
+  metrics: [ "MAP", "RBO" ]
+  partition_port:
+    0:
+      5000
+    1:
+      5001
+    2:
+      5002
+    3:
+      5003
+    4:
+      5004
+    5:
+      5005
+    6:
+      5006
+    7:
+      5007
+    8:
+      5008
+    9:
+      5009
+    10:
+      5010
+    11:
+      5011
+    12:
+      5012
+    13:
+      5013
+    14:
+      5014
+    15:
+      5015
 
 salsa:
   walks:

@@ -13,7 +13,8 @@ Metric = {
 
 
 def sample_users():
-    min_interactions = params["dataset"]["min_interactions"]
+    samples = int(dataset["sample_size"])
+    min_interactions = dataset["min_interactions"]
     print(f"sampling {samples} users with min {min_interactions}")
     pm.execute_notebook(
         "src/sample_users.ipynb",
@@ -92,9 +93,9 @@ def compute_recommendation_quality(metric):
             "baseline_recommendations_path": "data/baseline_recommendations.json",
             "single_partition_recommendations_path": "data/single_recommendations.json",
             "recommendations_path": f"data/{hash_function}_recommendations.json",
-            "merge_recommendations_path": f"data/{hash_function}_merge_recommendations.json",
-            "best_partition_recommendations_path": f"data/{hash_function}_best_partition_recommendations.json",
-            "highest_degree_recommendations_path": f"data/{hash_function}_highest_degree_recommendations.json",
+            "union_results_path ": f"data/{hash_function}_union_results.json",
+            "highest_hit_path": f"data/{hash_function}_highest_hit.json",
+            "most_interactions_path": f"data/{hash_function}_most_interactions.json",
             "output_diagram": f"{save_folder}/{hash_function}_{metric}@k.png",
             "output_metric_at_k": f"{save_folder}/{hash_function}_{metric}@k.csv"
         }
@@ -111,7 +112,7 @@ def get_stats():
         parameters={
             "hash_function": hash_function,
             "partition_port": partition_port,
-            "output_status": f"output/{hash_function}_status.csv"
+            "output_status": f"{save_folder}/{hash_function}_status.csv"
         }
     )
 
@@ -146,14 +147,15 @@ if __name__ == "__main__":
     user_sample_path = "data/users.json"
 
     ### Samples ###
-    samples = int(params["dataset"]["sample_size"])
-    should_sample = bool(params["dataset"]["should_sample"])
+    dataset = params.get("dataset", {"should_sample": False})
+    should_sample = bool(dataset.get("should_sample"))
 
     ### Compute variants ###
     salsa = params["salsa"]
 
     ### Baseline ###
-    should_generate_baseline = bool(params["baseline"]["should_generate_baseline"])
+    baseline = params.get("baseline", {"should_generate_baseline": False})
+    should_generate_baseline = bool(baseline.get("should_generate_baseline"))
 
     application = params["application"]
     hash_function = application["hash_function"]

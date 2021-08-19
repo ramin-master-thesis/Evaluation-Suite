@@ -1,26 +1,17 @@
-dataset:
-  should_sample: False
-  path: data/left_index.gzip
-  sample_size: 500
-
-baseline:
-  should_generate_baseline: False
-
 application:
-  - star-space:
-    id: StarSpace
-    hash_function: StarSpace
-    host: localhost
-    union_results: True
-    highest_hit: True
-    most_interactions: True
-    show_partitions: True
-    metrics: ["MAP", "RBO"]
-    partition_port:
-      0:
-        5003
-      1:
-        5004
+  id: StarSpace
+  hash_function: StarSpace
+  host: localhost
+  union_results: True
+  highest_hit: True
+  most_interactions: True
+  show_partitions: True
+  metrics: [ "MAP", "RBO" ]
+  partition_port:
+    0:
+      5003
+    1:
+      5004
 
 salsa:
   walks:
