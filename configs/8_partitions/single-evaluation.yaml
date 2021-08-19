@@ -5,17 +5,18 @@ dataset:
 
 baseline:
   should_generate_baseline: True
+  repeat: 10
 
-applications:
+application:
 
   - single:
     id: single
     hash_function: Single
     host: localhost
-    merge_1: False
-    merge_2: False
-    merge_3: False
-    calculate_map_k: False
+    union_results: False
+    highest_hit: False
+    most_interactions: False
+    metrics: ["MAP", "RBO"]
     partition_port:
       partition:
         5000

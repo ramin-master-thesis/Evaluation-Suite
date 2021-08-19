@@ -1,0 +1,30 @@
+dataset:
+  should_sample: False
+  path: data/left_index.gzip
+  sample_size: 500
+  min_interactions: 16
+
+baseline:
+  should_generate_baseline: False
+  repeat: 1
+
+application:
+  id: single
+  hash_function: Single
+  host: localhost
+  union_results: False
+  highest_hit: False
+  most_interactions: False
+  show_partitions: False
+  metrics: [ "MAP", "RBO" ]
+  partition_port:
+    partition:
+      5000
+
+salsa:
+  walks:
+    - 1000
+  walk_length:
+    - 100
+  limit:
+    - 10

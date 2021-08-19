@@ -6,6 +6,11 @@ import yaml
 from yaml import SafeLoader
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+Metric = {
+    "MAP": "Mean Average Precision",
+    "RBO": "Ranked-Biased Overlap",
+}
+
 
 def sample_users():
     min_interactions = params["dataset"]["min_interactions"]
@@ -25,7 +30,7 @@ def sample_users():
 def generate_baseline():
     ### Fetch baseline from API ###
     port = 5000
-    repeat_for_user = 10
+    repeat_for_user = int(params["baseline"]["repeat"])
     print(f"generating baseline with repeat for single user is {repeat_for_user}")
     pm.execute_notebook(
         "src/query_baseline.ipynb",
@@ -42,10 +47,9 @@ def generate_baseline():
 def fetch_recommendations(application):
     ### Fetch recommendations from API ###
     app_id = application["id"]
-    hash_function = application["hash_function"]
-    should_merge_1 = bool(application["merge_1"])
-    should_merge_2 = bool(application["merge_2"])
-    should_merge_3 = bool(application["merge_3"])
+    union_results = bool(application["union_results"])
+    highest_hit = bool(application["highest_hit"])
+    most_interactions = bool(application["most_interactions"])
     partition_port = application["partition_port"]
     print(f"fetch recommendations for {hash_function}, with partition port {partition_port}")
     pm.execute_notebook(
@@ -55,83 +59,50 @@ def fetch_recommendations(application):
             "users": user_sample_path,
             "hash_function": hash_function,
             "partition_port": partition_port,
-            "should_merge_1": should_merge_1,
-            "should_merge_2": should_merge_2,
-            "should_merge_3": should_merge_3,
-            "output_latency": f"data/{app_id}_latency.json",
+            "union_results": union_results,
+            "highest_hit": highest_hit,
+            "most_interactions": most_interactions,
             "output_recommendations": f"data/{app_id}_recommendations.json",
-            "output_merge_recommendations": f"data/{app_id}_merge_recommendations.json",
-            "output_best_partition_recommendations": f"data/{hash_function}_best_partition_recommendations.json",
-            "output_highest_degree_recommendations": f"data/{hash_function}_highest_degree_recommendations.json"
+            "output_union_results": f"data/{app_id}_union_results.json",
+            "output_highest_hit": f"data/{hash_function}_highest_hit.json",
+            "output_most_interactions": f"data/{hash_function}_most_interactions.json",
+            "output_latency": f"{save_folder}/{app_id}_latency.csv"
         }
     )
 
 
-def calculate_map_k(application):
+def compute_recommendation_quality(metric):
     app_id = application["id"]
-    hash_function = application["hash_function"]
     show_partitions = bool(application["show_partitions"])
-    show_merge_1 = bool(application["merge_1"])
-    show_merge_2 = bool(application["merge_2"])
-    show_merge_3 = bool(application["merge_3"])
-    print(f"calculating MAP@K for {hash_function}")
+    show_union_results = bool(application["union_results"])
+    show_highest_hit = bool(application["highest_hit"])
+    show_most_interactions = bool(application["most_interactions"])
+    print(f"calculating {metric}@K for {hash_function}")
     pm.execute_notebook(
-        "src/APK_MAPK.ipynb",
-        f"output/notebooks/APK_MAPK_{app_id}.ipynb",
+        "src/compute_recommendation_quality.ipynb",
+        f"output/notebooks/compute_recommendation_quality_{app_id}.ipynb",
         parameters={
             "users": user_sample_path,
             "hash_function": hash_function,
+            "metric": metric,
             "show_partitions": show_partitions,
-            "show_merge_1": show_merge_1,
-            "show_merge_2": show_merge_2,
-            "show_merge_3": show_merge_3,
+            "show_union_results": show_union_results,
+            "show_highest_hit": show_highest_hit,
+            "show_most_interactions": show_most_interactions,
             "baseline_recommendations_path": "data/baseline_recommendations.json",
             "single_partition_recommendations_path": "data/single_recommendations.json",
             "recommendations_path": f"data/{hash_function}_recommendations.json",
             "merge_recommendations_path": f"data/{hash_function}_merge_recommendations.json",
             "best_partition_recommendations_path": f"data/{hash_function}_best_partition_recommendations.json",
             "highest_degree_recommendations_path": f"data/{hash_function}_highest_degree_recommendations.json",
-            "output_map": f"data/{hash_function}_map@k.json",
-            "output_diagram": f"output/{hash_function}_map@k.png",
-            "output_map_at_k": f"output/{hash_function}_map@k.csv"
+            "output_diagram": f"{save_folder}/{hash_function}_{metric}@k.png",
+            "output_metric_at_k": f"{save_folder}/{hash_function}_{metric}@k.csv"
         }
     )
 
 
-def calculate_rbo_k(application):
+def get_stats():
     app_id = application["id"]
-    hash_function = application["hash_function"]
-    show_partitions = bool(application["show_partitions"])
-    show_merge_1 = bool(application["merge_1"])
-    show_merge_2 = bool(application["merge_2"])
-    show_merge_3 = bool(application["merge_3"])
-    print(f"calculating RBO@K for {hash_function}")
-    pm.execute_notebook(
-        "src/RBO.ipynb",
-        f"output/notebooks/RBO_{app_id}.ipynb",
-        parameters={
-            "users": user_sample_path,
-            "hash_function": hash_function,
-            "show_partitions": show_partitions,
-            "show_merge_1": show_merge_1,
-            "show_merge_2": show_merge_2,
-            "show_merge_3": show_merge_3,
-            "baseline_recommendations_path": "data/baseline_recommendations.json",
-            "single_partition_recommendations_path": "data/single_recommendations.json",
-            "recommendations_path": f"data/{hash_function}_recommendations.json",
-            "merge_recommendations_path": f"data/{hash_function}_merge_recommendations.json",
-            "best_partition_recommendations_path": f"data/{hash_function}_best_partition_recommendations.json",
-            "highest_degree_recommendations_path": f"data/{hash_function}_highest_degree_recommendations.json",
-            "output_rbo": f"data/{hash_function}_rbo@k.json",
-            "output_diagram": f"output/{hash_function}_rbo@k.png",
-            "output_rbo_at_k": f"output/{hash_function}_rbo@k.csv"
-        }
-    )
-
-
-def get_stats(application):
-    app_id = application["id"]
-    hash_function = application["hash_function"]
     partition_port = application["partition_port"]
     print(f"getting stats for {hash_function}")
     pm.execute_notebook(
@@ -150,12 +121,11 @@ def main():
         sample_users()
     if should_generate_baseline:
         generate_baseline()
-    for application in params["applications"]:
-        fetch_recommendations(application)
-        get_stats(application)
-        if application["calculate_map_k"]:
-            calculate_map_k(application)
-            calculate_rbo_k(application)
+
+    fetch_recommendations(application)
+    get_stats()
+    for metric in application["metrics"]:
+        compute_recommendation_quality(metric)
 
 
 if __name__ == "__main__":
@@ -164,7 +134,7 @@ if __name__ == "__main__":
         exit(1)
 
     if not os.path.exists(f"{ROOT_DIR}/output/notebooks"):
-        os.makedirs(f"{ROOT_DIR}/output/notebooks")
+        os.mkdir(f"{ROOT_DIR}/output/notebooks")
 
     ### Parameters ###
     path_to_config_file = sys.argv[1]
@@ -184,5 +154,12 @@ if __name__ == "__main__":
 
     ### Baseline ###
     should_generate_baseline = bool(params["baseline"]["should_generate_baseline"])
+
+    application = params["application"]
+    hash_function = application["hash_function"]
+    save_folder = f"{ROOT_DIR}/output/{hash_function}"
+
+    if not os.path.exists(save_folder):
+        os.mkdir(save_folder)
 
     main()

@@ -23,39 +23,41 @@ def fetch_star_space_recommendations():
             "users": user_sample_path,
             "hash_function": hash_function,
             "partition_port": partition_port,
-            "should_merge_1": True,
-            "should_merge_2": True,
-            "should_merge_3": True,
-            "output_latency": f"data/{app_id}_latency.json",
+            "union_results": True,
+            "highest_hit": True,
+            "most_interactions": True,
             "output_recommendations": f"data/{app_id}_recommendations.json",
-            "output_merge_recommendations": f"data/{app_id}_merge_recommendations.json",
-            "output_best_partition_recommendations": f"data/{hash_function}_best_partition_recommendations.json",
-            "output_highest_degree_recommendations": f"data/{hash_function}_highest_degree_recommendations.json"
+            "output_union_results": f"data/{app_id}_union_results.json",
+            "output_highest_hit": f"data/{hash_function}_highest_hit.json",
+            "output_most_interactions": f"data/{hash_function}_most_interactions.json",
+            "output_latency": f"output/{app_id}_latency.csv"
         }
     )
 
 
-def calculate_map_k():
+def compute_recommendation_quality():
     ### Fetch recommendations from API ###
     print(f"calculating MAP@K for {hash_function}")
+    metric = "MAP"
     pm.execute_notebook(
-        "src/APK_MAPK.ipynb",
-        f"output/notebooks/APK_MAPK_{app_id}.ipynb",
+        "src/compute_recommendation_quality.ipynb",
+        f"output/notebooks/compute_recommendation_quality_{app_id}.ipynb",
         parameters={
             "users": user_sample_path,
             "hash_function": hash_function,
-            "should_merge_1": True,
-            "should_merge_2": True,
-            "should_merge_3": True,
+            "metric": metric,
+            "show_union_results": True,
+            "show_highest_hit": True,
+            "show_most_interactions": True,
             "baseline_recommendations_path": "data/baseline_recommendations.json",
             "single_partition_recommendations_path": "data/single_recommendations.json",
             "recommendations_path": f"data/{hash_function}_recommendations.json",
-            "merge_recommendations_path": f"data/{hash_function}_merge_recommendations.json",
-            "best_partition_recommendations_path": f"data/{hash_function}_best_partition_recommendations.json",
-            "highest_degree_recommendations_path": f"data/{hash_function}_highest_degree_recommendations.json",
+            "union_results_path": f"data/{hash_function}_union_results.json",
+            "highest_hit_path": f"data/{hash_function}_highest_hit.json",
+            "most_interactions_path": f"data/{hash_function}_most_interactions.json",
             "output_map": f"data/{hash_function}_map@k.json",
-            "output_diagram": f"output/{hash_function}_map@k.png",
-            "output_map_at_k": f"output/{hash_function}_map@k.csv"
+            "output_diagram": f"output/{hash_function}_{metric}@k.png",
+            "output_metric_at_k": f"output/{hash_function}_{metric}@k.csv"
         }
     )
 
@@ -75,7 +77,7 @@ def get_stats():
 
 def main():
     fetch_star_space_recommendations()
-    calculate_map_k()
+    compute_recommendation_quality()
     get_stats()
 
 

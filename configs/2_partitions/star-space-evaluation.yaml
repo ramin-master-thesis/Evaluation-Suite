@@ -6,21 +6,21 @@ dataset:
 baseline:
   should_generate_baseline: False
 
-applications:
+application:
   - star-space:
     id: StarSpace
     hash_function: StarSpace
     host: localhost
-    merge_1: True
-    merge_2: True
-    merge_3: True
-    show_partitions: False
-    calculate_map_k: True
+    union_results: True
+    highest_hit: True
+    most_interactions: True
+    show_partitions: True
+    metrics: ["MAP", "RBO"]
     partition_port:
       0:
-        5002
-      1:
         5003
+      1:
+        5004
 
 salsa:
   walks:

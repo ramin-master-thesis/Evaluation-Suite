@@ -6,49 +6,48 @@ dataset:
 baseline:
   should_generate_baseline: False
 
-applications:
-  - star-space:
-    id: StarSpace
-    hash_function: StarSpace
-    host: localhost
-    merge_1: True
-    merge_2: True
-    merge_3: True
-    show_partitions: False
-    calculate_map_k: True
-    partition_port:
-      0:
-        5016
-      1:
-        5017
-      2:
-        5018
-      3:
-        5019
-      4:
-        5020
-      5:
-        5021
-      6:
-        5022
-      7:
-        5023
-      8:
-        5024
-      9:
-        5025
-      10:
-        5026
-      11:
-        5027
-      12:
-        5028
-      13:
-        5029
-      14:
-        5030
-      15:
-        5031
+application:
+  id: StarSpace
+  hash_function: StarSpace
+  host: localhost
+  union_results: True
+  highest_hit: True
+  most_interactions: True
+  show_partitions: False
+  metrics: [ "MAP", "RBO" ]
+  partition_port:
+    0:
+      5016
+    1:
+      5017
+    2:
+      5018
+    3:
+      5019
+    4:
+      5020
+    5:
+      5021
+    6:
+      5022
+    7:
+      5023
+    8:
+      5024
+    9:
+      5025
+    10:
+      5026
+    11:
+      5027
+    12:
+      5028
+    13:
+      5029
+    14:
+      5030
+    15:
+      5031
 
 salsa:
   walks:
