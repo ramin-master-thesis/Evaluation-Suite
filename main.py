@@ -45,13 +45,13 @@ def generate_baseline():
     )
 
 
-def fetch_recommendations(application):
+def fetch_recommendations(app):
     ### Fetch recommendations from API ###
-    app_id = application["id"]
-    union_results = bool(application["union_results"])
-    highest_hit = bool(application["highest_hit"])
-    most_interactions = bool(application["most_interactions"])
-    partition_port = application["partition_port"]
+    app_id = app["id"]
+    union_results = bool(app["union_results"])
+    highest_hit = bool(app["highest_hit"])
+    most_interactions = bool(app["most_interactions"])
+    partition_port = app["partition_port"]
     print(f"fetch recommendations for {hash_function}, with partition port {partition_port}")
     pm.execute_notebook(
         "src/query_recommendations.ipynb",
@@ -91,7 +91,6 @@ def compute_recommendation_quality(metric):
             "show_highest_hit": show_highest_hit,
             "show_most_interactions": show_most_interactions,
             "baseline_recommendations_path": "data/baseline_recommendations.json",
-            "single_partition_recommendations_path": "data/single_recommendations.json",
             "recommendations_path": f"data/{hash_function}_recommendations.json",
             "union_results_path ": f"data/{hash_function}_union_results.json",
             "highest_hit_path": f"data/{hash_function}_highest_hit.json",

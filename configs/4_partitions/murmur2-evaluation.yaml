@@ -1,3 +1,13 @@
+dataset:
+  should_sample: True
+  path: data/left_index.gzip
+  sample_size: 500
+  min_interactions: 16
+
+baseline:
+  should_generate_baseline: True
+  repeat: 1
+
 application:
   id: murmur2
   hash_function: murmur2
@@ -9,13 +19,13 @@ application:
   metrics: [ "MAP", "RBO" ]
   partition_port:
     0:
-      5000
-    1:
       5001
-    2:
+    1:
       5002
-    3:
+    2:
       5003
+    3:
+      5004
 
 salsa:
   walks:
